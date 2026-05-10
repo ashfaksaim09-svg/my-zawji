@@ -1,0 +1,711 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>For My Qalbi 🤍</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;600;700&family=Parisienne&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 25%, #f3e5f5 50%, #fce4ec 75%, #fff0f5 100%);
+            overflow-x: hidden;
+            font-family: 'Lato', sans-serif;
+            position: relative;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(255,182,193,0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(216,191,216,0.4) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(255,240,245,0.6) 0%, transparent 70%),
+                linear-gradient(135deg, #fff0f5, #fce4ec, #f3e5f5);
+            animation: bgShift 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes bgShift {
+            0% { filter: hue-rotate(0deg) brightness(1); }
+            100% { filter: hue-rotate(15deg) brightness(1.05); }
+        }
+
+        #sparkleCanvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flower-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: flowerFall linear forwards;
+            user-select: none;
+        }
+
+        @keyframes flowerFall {
+            0% { opacity: 0; transform: translateY(-50px) rotate(0deg) scale(0); }
+            10% { opacity: 1; transform: translateY(0px) rotate(20deg) scale(1.2); }
+            90% { opacity: 0.7; }
+            100% { opacity: 0; transform: translateY(110vh) rotate(720deg) scale(0.5); }
+        }
+
+        .flower.burst {
+            animation: flowerBurst ease-out forwards;
+        }
+
+        @keyframes flowerBurst {
+            0% { opacity: 0; transform: translate(0,0) scale(0) rotate(0deg); }
+            30% { opacity: 1; transform: translate(var(--tx), var(--ty)) scale(1.3) rotate(var(--rot)); }
+            70% { opacity: 0.8; transform: translate(var(--tx2), var(--ty2)) scale(1) rotate(var(--rot2)); }
+            100% { opacity: 0; transform: translate(var(--tx3), var(--ty3)) scale(0.3) rotate(var(--rot3)); }
+        }
+
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 3;
+            animation: floatHeart ease-in-out infinite;
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        @keyframes floatHeart {
+            0%, 100% { transform: translateY(0) rotate(-10deg); opacity: 0.4; }
+            50% { transform: translateY(-20px) rotate(10deg); opacity: 0.8; }
+        }
+
+        /* ========== TAP TO START SCREEN ========== */
+        #tapScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #fff0f5, #fce4ec, #f3e5f5);
+            cursor: pointer;
+            transition: opacity 1.5s ease;
+        }
+
+        #tapScreen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tap-flower {
+            font-size: 90px;
+            animation: tapFlowerPulse 1.5s ease-in-out infinite;
+            margin-bottom: 25px;
+        }
+
+        @keyframes tapFlowerPulse {
+            0%, 100% { transform: scale(1) rotate(-5deg); }
+            50% { transform: scale(1.15) rotate(5deg); }
+        }
+
+        .tap-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 48px;
+            color: #c2185b;
+            text-align: center;
+            text-shadow: 0 0 30px rgba(194,24,91,0.4);
+            margin-bottom: 10px;
+            animation: tapGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes tapGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(194,24,91,0.3); }
+            50% { text-shadow: 0 0 50px rgba(194,24,91,0.7); }
+        }
+
+        .tap-sub {
+            font-family: 'Dancing Script', cursive;
+            font-size: 20px;
+            color: #e91e8c;
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .tap-btn {
+            background: linear-gradient(135deg, #ff8fab, #c2185b);
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 22px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 30px rgba(194,24,91,0.4),
+                0 0 0 0 rgba(194,24,91,0.4);
+            animation: tapBtnPulse 1.5s ease-in-out infinite;
+            transition: transform 0.2s ease;
+        }
+
+        .tap-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes tapBtnPulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(194,24,91,0.4), 0 0 0 0 rgba(194,24,91,0.3); }
+            50% { box-shadow: 0 8px 30px rgba(194,24,91,0.6), 0 0 0 15px rgba(194,24,91,0); }
+        }
+
+        .tap-hearts {
+            margin-top: 25px;
+            font-size: 20px;
+            animation: floatHeart 2s ease-in-out infinite;
+            letter-spacing: 8px;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        #mainContent {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 30px 20px 60px;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        #mainContent.show {
+            opacity: 1;
+        }
+
+        .top-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 52px;
+            color: #c2185b;
+            text-align: center;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(194,24,91,0.3);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(194,24,91,0.3); }
+            50% { text-shadow: 0 0 40px rgba(194,24,91,0.6); }
+        }
+
+        .top-subtitle {
+            font-family: 'Parisienne', cursive;
+            font-size: 20px;
+            color: #e91e8c;
+            text-align: center;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.7);
+            border-radius: 30px;
+            padding: 35px 28px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow:
+                0 8px 32px rgba(194,24,91,0.15),
+                0 0 0 1px rgba(255,255,255,0.5),
+                inset 0 0 60px rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(255,182,193,0.15), transparent 60%);
+            animation: cardGlow 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes cardGlow {
+            0%, 100% { transform: rotate(0deg); opacity: 0.5; }
+            50% { transform: rotate(180deg); opacity: 1; }
+        }
+
+        .heart-icon {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 15px;
+            animation: heartbeat 1.2s ease-in-out infinite;
+            display: block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.25); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.15); }
+            70% { transform: scale(1); }
+        }
+
+        .letter-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 19px;
+            line-height: 1.9;
+            color: #4a1030;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-text .greeting {
+            font-family: 'Great Vibes', cursive;
+            font-size: 38px;
+            color: #c2185b;
+            display: block;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .letter-text .highlight {
+            color: #e91e8c;
+            font-weight: 700;
+        }
+
+        .letter-text .soft {
+            color: #ad1457;
+            font-style: italic;
+        }
+
+        .letter-text p {
+            margin-bottom: 18px;
+        }
+
+        .letter-text .big-line {
+            font-family: 'Parisienne', cursive;
+            font-size: 22px;
+            color: #c2185b;
+            display: block;
+            margin: 15px 0;
+        }
+
+        .cute-divider {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            opacity: 0.6;
+            letter-spacing: 8px;
+        }
+
+        .ending-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 36px;
+            color: #c2185b;
+            text-align: center;
+            margin-top: 20px;
+            text-shadow: 0 0 20px rgba(194,24,91,0.3);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        .footer-love {
+            margin-top: 35px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 16px;
+            color: rgba(194,24,91,0.6);
+            text-align: center;
+        }
+
+        .sparkle-deco {
+            position: absolute;
+            font-size: 12px;
+            animation: sparkleSpin 3s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes sparkleSpin {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+        }
+
+        /* ========== MUSIC BUTTON ========== */
+        .music-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 100;
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(194,24,91,0.2);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .music-btn.visible {
+            display: flex;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 25px rgba(194,24,91,0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TAP TO START SCREEN -->
+    <div id="tapScreen">
+        <div class="tap-flower">🌸</div>
+        <div class="tap-title">For My Qalbi</div>
+        <div class="tap-sub">something special is waiting for you 🤍</div>
+        <button class="tap-btn" onclick="startExperience()">
+            💗 Open Your Surprise 💗
+        </button>
+        <div class="tap-hearts">🌸 💗 🌷</div>
+    </div>
+
+    <!-- Music Button -->
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+
+    <!-- Background -->
+    <div class="bg-gradient"></div>
+
+    <!-- Sparkle Canvas -->
+    <canvas id="sparkleCanvas"></canvas>
+
+    <!-- Flower Container -->
+    <div class="flower-container" id="flowerContainer"></div>
+
+    <!-- Floating Hearts -->
+    <div id="floatingHearts"></div>
+
+    <!-- Main Content -->
+    <div id="mainContent">
+        <div class="top-title">My Qalbi 🤍</div>
+        <div class="top-subtitle">a little something from my heart to yours ✨</div>
+
+        <div class="glass-card">
+            <span class="sparkle-deco" style="top:10px;left:10px;">✨</span>
+            <span class="sparkle-deco" style="top:10px;right:10px;animation-delay:1s;">🌸</span>
+            <span class="sparkle-deco" style="bottom:10px;left:10px;animation-delay:2s;">💫</span>
+            <span class="sparkle-deco" style="bottom:10px;right:10px;animation-delay:0.5s;">✨</span>
+
+            <span class="heart-icon">💗</span>
+
+            <div class="letter-text">
+                <span class="greeting">HI MY QALBI 🤍</span>
+
+                <p>First of all come here.<br>
+                I just wanna steal one tiny kiss before I say anything 😚💋</p>
+
+                <div class="cute-divider">🌸 · 🌷 · 🌸</div>
+
+                <p>Oke oke now listen carefully <span class="highlight">my wife, my shunamoni, my prettiest blessing ever</span> — the feeling of calling you <span class="soft">"my wife"</span> is literally the warmest feeling in this whole dunya. It makes my heart feel safe, soft, and full of love in a way I can never explain, jaan.</p>
+
+                <p>Do you know something?<br>
+                I truly believe I have the purest love in this world — and guess who owns every single piece of my heart?<br>
+                <span class="big-line">It's you, my qalbi. Only you. 🤍</span></p>
+
+                <div class="cute-divider">💫 · ✨ · 💫</div>
+
+                <p>Allah SWT blessed me twice in the most beautiful way possible.<br>
+                First, He guided me and gave me Islam, the greatest blessing ever.<br>
+                And then <span class="highlight">He gave me you.</span> The most beautiful girl, the softest soul, my peace, my comfort, my dunya and akhira partner. 🌸</p>
+
+                <p>My love, <span class="soft">my future mommy of our little Musa</span> 😭🤍 you are already the best wife, the best mother for our future babies, and somehow also the best mommy for this emotional 20-year-old baby right here 😔🍼</p>
+
+                <div class="cute-divider">🌸 · 💗 · 🌸</div>
+
+                <p>And jaan you are <span class="highlight">SO beautiful.</span><br>
+                Like actually unfairly beautiful.<br>
+                Sometimes I look at you and genuinely wonder how Allah created someone this pretty and then decided: <span class="soft">"yes, she will be his wife."</span> 😭💗</p>
+
+                <p><span class="highlight">I'm so proud of you, my heart.<br>
+                So, so proud.</span></p>
+
+                <p>You handle your life, your family, your struggles, your pain, and everything around you with so much strength — even when things get hard. And even during your hardest days, you still manage to smile and laugh and wallahi <span class="soft">that smile destroys me every single time.</span></p>
+
+                <div class="cute-divider">💫 · 🌷 · 💫</div>
+
+                <p>The way you make me laugh, the way you comfort me, the way you love me so softly… it makes me feel like the luckiest man alive. This 20-year-old baby is deeply grateful to have you 😭🤍</p>
+
+                <p>And btw if loving you was a job, I would be <span class="highlight">employee of the month every month</span> 🫡💐</p>
+
+                <div class="cute-divider">🌸 · ✨ · 🌸</div>
+
+                <p><span class="soft">My shunamoni, my princess, my forever person</span> — I pray Allah protects our love, strengthens our bond, and keeps us together fid-dunya wal-akhirah. Ameen.</p>
+
+                <p>Because you are not just my love.<br>
+                <span class="big-line">You are my home. 🌷</span>
+                My safe place.<br>
+                My answered dua.<br>
+                My akhira princess. 🌷</p>
+
+                <div class="cute-divider">💗 · 🌸 · 💗</div>
+
+                <p>And I truly hope, my love, that I'm your safe place too. A place where your heart can rest peacefully, where your soul feels loved, protected, and understood. 🤍</p>
+
+                <p>Wallahi, you are one of the greatest blessings Allah has ever given me, and <span class="highlight">I will never let this blessing go from me.</span><br>
+                I will hold your hand through every soft day and every hard day, fid-dunya wal-akhirah. 🌸</p>
+
+                <div class="cute-divider">✨ · 💫 · ✨</div>
+
+                <p><span class="big-line">I love you more than words will ever be able to explain.</span></p>
+
+                <p>Now go have a beautiful day, my pretty wife 🤍</p>
+            </div>
+
+            <div class="ending-text">Always yours 🤍</div>
+        </div>
+
+        <div class="footer-love">Made with all my love for you 🤍</div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <!-- Put your music file name here -->
+        <source src="music/AP Dhillon & Shinda Kahlon - By My Side (Official Audio) [N8dexd1PqEw].mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let musicPlaying = false;
+        const music = document.getElementById('bgMusic');
+        music.volume = 0.4;
+
+        // ========== START EXPERIENCE ON TAP ==========
+        function startExperience() {
+            // Play music on user interaction - THIS IS THE KEY!
+            music.play().then(() => {
+                musicPlaying = true;
+                document.getElementById('musicBtn').textContent = '🔇';
+            }).catch((e) => {
+                console.log('Music error:', e);
+            });
+
+            // Hide tap screen
+            const tapScreen = document.getElementById('tapScreen');
+            tapScreen.classList.add('hide');
+
+            setTimeout(() => {
+                tapScreen.style.display = 'none';
+            }, 1500);
+
+            // Show music button
+            setTimeout(() => {
+                document.getElementById('musicBtn').classList.add('visible');
+            }, 2000);
+
+            // Show main content
+            setTimeout(() => {
+                document.getElementById('mainContent').classList.add('show');
+            }, 500);
+
+            // Init everything
+            initSparkles();
+            createFloatingHearts();
+
+            // Flower bursts
+            setTimeout(() => createFlowerBurst(), 300);
+            setTimeout(() => createFlowerBurst(), 1200);
+            setTimeout(() => createFlowerBurst(), 2200);
+
+            // Continuous falling flowers
+            setTimeout(() => {
+                setInterval(createFallingFlower, 900);
+            }, 1000);
+        }
+
+        // ========== TOGGLE MUSIC ==========
+        function toggleMusic() {
+            if (musicPlaying) {
+                music.pause();
+                document.getElementById('musicBtn').textContent = '🎵';
+                musicPlaying = false;
+            } else {
+                music.play();
+                document.getElementById('musicBtn').textContent = '🔇';
+                musicPlaying = true;
+            }
+        }
+
+        // ========== FLOWERS ==========
+        const flowers = ['🌸','🌹','🌷','🌺','🌼','💐','🏵️','🌻','💮','🪷'];
+        const petals = ['🍃','✿','❀'];
+
+        function createFlowerBurst() {
+            const container = document.getElementById('flowerContainer');
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const count = 35;
+
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'flower burst';
+                    el.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+                    el.style.fontSize = (Math.random() * 20 + 16) + 'px';
+                    el.style.left = centerX + 'px';
+                    el.style.top = centerY + 'px';
+
+                    const angle = (i / count) * 360 + Math.random() * 20;
+                    const dist1 = Math.random() * 80 + 40;
+                    const dist2 = Math.random() * 200 + 100;
+                    const dist3 = Math.random() * 400 + 200;
+
+                    el.style.setProperty('--tx', Math.cos(angle * Math.PI / 180) * dist1 + 'px');
+                    el.style.setProperty('--ty', Math.sin(angle * Math.PI / 180) * dist1 + 'px');
+                    el.style.setProperty('--tx2', Math.cos(angle * Math.PI / 180) * dist2 + 'px');
+                    el.style.setProperty('--ty2', Math.sin(angle * Math.PI / 180) * dist2 + 'px');
+                    el.style.setProperty('--tx3', Math.cos(angle * Math.PI / 180) * dist3 + 'px');
+                    el.style.setProperty('--ty3', (Math.sin(angle * Math.PI / 180) * dist3 + 100) + 'px');
+                    el.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+                    el.style.setProperty('--rot2', (Math.random() * 720) + 'deg');
+                    el.style.setProperty('--rot3', (Math.random() * 1080) + 'deg');
+                    el.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+
+                    container.appendChild(el);
+                    setTimeout(() => el.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        function createFallingFlower() {
+            const container = document.getElementById('flowerContainer');
+            const el = document.createElement('div');
+            el.className = 'flower';
+            el.textContent = Math.random() > 0.5
+                ? flowers[Math.floor(Math.random() * flowers.length)]
+                : petals[Math.floor(Math.random() * petals.length)];
+            el.style.fontSize = (Math.random() * 18 + 12) + 'px';
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.top = '-30px';
+            el.style.animationDuration = (Math.random() * 6 + 5) + 's';
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 12000);
+        }
+
+        // ========== FLOATING HEARTS ==========
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartEmojis = ['💗','💕','🤍','💖','💓','💝','💞'];
+            const positions = [
+                {left:'5%', top:'20%', delay:'0s'},
+                {left:'90%', top:'15%', delay:'0.5s'},
+                {left:'3%', top:'60%', delay:'1s'},
+                {left:'92%', top:'55%', delay:'1.5s'},
+                {left:'8%', top:'85%', delay:'2s'},
+                {left:'88%', top:'80%', delay:'2.5s'},
+            ];
+
+            positions.forEach((pos, i) => {
+                const el = document.createElement('div');
+                el.className = 'floating-heart';
+                el.textContent = heartEmojis[i % heartEmojis.length];
+                el.style.left = pos.left;
+                el.style.top = pos.top;
+                el.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                el.style.animationDelay = pos.delay;
+                container.appendChild(el);
+            });
+        }
+
+        // ========== SPARKLES ==========
+        function initSparkles() {
+            const canvas = document.getElementById('sparkleCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const sparkles = [];
+            const colors = [
+                'rgba(255,182,193,',
+                'rgba(216,191,216,',
+                'rgba(255,105,180,',
+                'rgba(255,255,255,',
+            ];
+
+            class Sparkle {
+                constructor() { this.reset(); }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = -Math.random() * 0.5 - 0.2;
+                    this.speedX = (Math.random() - 0.5) * 0.3;
+                    this.life = 1;
+                    this.decay = Math.random() * 0.008 + 0.003;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    this.life -= this.decay;
+                    if (this.life <= 0) this.reset();
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color + (this.life * 0.7) + ')';
+                    ctx.fill();
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.strokeStyle = this.color + (this.life * 0.5) + ')';
+                    ctx.lineWidth = 0.5;
+                    for (let i = 0; i < 4; i++) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, -this.size * 2);
+                        ctx.lineTo(0, this.size * 2);
+                        ctx.stroke();
+                        ctx.rotate(Math.PI / 4);
+                    }
+                    ctx.restore();
+                }
+            }
+
+            for (let i = 0; i < 60; i++) sparkles.push(new Sparkle());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                sparkles.forEach(s => { s.update(); s.draw(); });
+                requestAnimationFrame(animate);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+    </script>
+</body>
+</html>
